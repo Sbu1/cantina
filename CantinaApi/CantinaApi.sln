@@ -1,0 +1,40 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.12.35728.132
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CantinaApi", "CantinaApi\CantinaApi.csproj", "{B08BB5A3-1604-4091-89DA-2FC27783EA7C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cantina.Domain", "Cantina.Domain\Cantina.Domain.csproj", "{9846E87E-E4F9-4DAB-AFA0-9912D9790BC8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cantina.Application", "Cantina.Application\Cantina.Application.csproj", "{F43169A4-517F-4941-9F21-9F67C9534EC8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cantina.Infrastructure.Persistence", "Cantina.Infrastructure.Persistence\Cantina.Infrastructure.Persistence.csproj", "{DC78D283-EF9F-441D-9D29-627B559EE56B}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B08BB5A3-1604-4091-89DA-2FC27783EA7C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B08BB5A3-1604-4091-89DA-2FC27783EA7C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B08BB5A3-1604-4091-89DA-2FC27783EA7C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B08BB5A3-1604-4091-89DA-2FC27783EA7C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9846E87E-E4F9-4DAB-AFA0-9912D9790BC8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9846E87E-E4F9-4DAB-AFA0-9912D9790BC8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9846E87E-E4F9-4DAB-AFA0-9912D9790BC8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9846E87E-E4F9-4DAB-AFA0-9912D9790BC8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F43169A4-517F-4941-9F21-9F67C9534EC8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F43169A4-517F-4941-9F21-9F67C9534EC8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F43169A4-517F-4941-9F21-9F67C9534EC8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F43169A4-517F-4941-9F21-9F67C9534EC8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DC78D283-EF9F-441D-9D29-627B559EE56B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DC78D283-EF9F-441D-9D29-627B559EE56B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DC78D283-EF9F-441D-9D29-627B559EE56B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DC78D283-EF9F-441D-9D29-627B559EE56B}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
