@@ -8,7 +8,6 @@ namespace CantinaApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
     public class DishesController : ControllerBase
     {
         private readonly IDishRepository _dishRepository;
@@ -19,6 +18,7 @@ namespace CantinaApi.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Admin,User")]
         public async Task<IActionResult> GetAll()
         {
             var dishes = await _dishRepository.GetAllAsync();
@@ -26,6 +26,7 @@ namespace CantinaApi.Controllers
         }
 
         [HttpGet("{id}")]
+        [Authorize(Roles = "Admin,User")]
         public async Task<IActionResult> GetById(int id)
         {
             var dish = await _dishRepository.GetByIdAsync(id);
@@ -35,6 +36,7 @@ namespace CantinaApi.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Create([FromBody] Dish dish)
         {
             if (string.IsNullOrWhiteSpace(dish.Name)) return BadRequest(new { Message = "Dish name is required" });
@@ -44,6 +46,7 @@ namespace CantinaApi.Controllers
         }
 
         [HttpPut("{id}")]
+        [Authorize(Roles = "Admin,User")]
         public async Task<IActionResult> Update(int id, [FromBody] Dish dish)
         {
             if (id != dish.Id) return BadRequest(new { Message = "ID mismatch" });
@@ -56,6 +59,7 @@ namespace CantinaApi.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(int id)
         {
             var existingDish = await _dishRepository.GetByIdAsync(id);

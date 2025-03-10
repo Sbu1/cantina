@@ -3,6 +3,7 @@ using System.Security.Claims;
 using System.Text;
 using Cantina.Domain;
 using Cantina.Infrastructure.Persistence;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
@@ -49,6 +50,18 @@ namespace CantinaAPI.Controllers
 
             var token = GenerateJwtToken(user);
             return Ok(new { Token = token });
+        }
+
+        [Authorize(Roles = "Admin")]
+        [HttpPost("assign-admin/{userId}")]
+        public async Task<IActionResult> AssignAdminRole(string userId)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user == null)
+                return NotFound(new { message = "User not found" });
+
+            await _userManager.AddToRoleAsync(user, "Admin");
+            return Ok(new { message = "Admin role assigned successfully" });
         }
 
         private string GenerateJwtToken(User user)

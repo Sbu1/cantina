@@ -1,5 +1,6 @@
 ﻿using Cantina.Application.Interfaces;
 using Cantina.Domain.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -17,6 +18,7 @@ namespace CantinaApi.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Admin,User")]
         public async Task<IActionResult> GetAll()
         {
             var drinkes = await _drinkRepository.GetAllAsync();
@@ -24,6 +26,7 @@ namespace CantinaApi.Controllers
         }
 
         [HttpGet("{id}")]
+        [Authorize(Roles = "Admin,User")]
         public async Task<IActionResult> GetById(int id)
         {
             var drink = await _drinkRepository.GetByIdAsync(id);
@@ -33,6 +36,7 @@ namespace CantinaApi.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Create([FromBody] Drink drink)
         {
             if (string.IsNullOrWhiteSpace(drink.Name)) return BadRequest(new { Message = "drink name is required" });
@@ -42,6 +46,7 @@ namespace CantinaApi.Controllers
         }
 
         [HttpPut("{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Update(int id, [FromBody] Drink drink)
         {
             if (id != drink.Id) return BadRequest(new { Message = "ID mismatch" });
@@ -54,6 +59,7 @@ namespace CantinaApi.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(int id)
         {
             var existingdrink = await _drinkRepository.GetByIdAsync(id);
