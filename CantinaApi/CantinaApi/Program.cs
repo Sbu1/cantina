@@ -20,6 +20,14 @@ builder.Services.AddIdentity<User, IdentityRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>()
     .AddDefaultTokenProviders();
 
+builder.Services.Configure<IdentityOptions>(options =>
+{
+    options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5); // Lockout duration
+    options.Lockout.MaxFailedAccessAttempts = 5; // Maximum failed attempts before lockout
+    options.Lockout.AllowedForNewUsers = true;
+});
+
+
 builder.Logging.ClearProviders();
 builder.Logging.AddConsole();
 
