@@ -5,8 +5,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Cantina.Infrastructure.Persistence.Repository
 {
-    [Route("api/[controller]")]
-    [ApiController]
     public class DishRepository : IDishRepository
     {
         private readonly ApplicationDbContext _context;

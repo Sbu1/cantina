@@ -1,8 +1,10 @@
 using System.Text;
+using Cantina.Application.Interfaces;
 using Cantina.Domain;
 using Cantina.Infrastructure.Persistence;
 using Cantina.Infrastructure.Persistence.DI;
 using Cantina.Infrastructure.Persistence.Middleware;
+using Cantina.Infrastructure.Persistence.Repository;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -19,13 +21,13 @@ builder.Services.AddIdentity<User, IdentityRole>()
 
 builder.Logging.ClearProviders();
 builder.Logging.AddConsole();
-builder.Services.AddOpenApi();
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-builder.Services.AddInfrastructure();
+
+builder.Services.AddScoped<IDishRepository, DishRepository>();
+builder.Services.AddScoped<IDrinkRepository, DrinkRepository>();
+//builder.Services.AddInfrastructure();
 
 
-var key = Encoding.UTF8.GetBytes("mykey1234!");
+var key = Encoding.UTF8.GetBytes("mykey1234!"); //needs to be moved from here 
 
 builder.Services.AddAuthentication(options =>
 {
@@ -44,18 +46,18 @@ builder.Services.AddAuthentication(options =>
         ValidateAudience = false
     };
 });
-
+builder.Services.AddControllers();
 builder.Services.AddAuthorization();
-
+builder.Services.AddOpenApi();
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
 var app = builder.Build();
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();  
-    app.UseSwaggerUI();  
-}
+app.UseSwagger();
+app.UseSwaggerUI();
 app.MapOpenApi();
 app.UseMiddleware<ExceptionHandlingMiddleware>();
 app.UseAuthentication();
 app.UseAuthorization();
+app.UseDeveloperExceptionPage();
 
 app.Run();

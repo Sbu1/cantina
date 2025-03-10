@@ -9,7 +9,7 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace CantinaAPI.Controllers
 {
-    [Route("api/[AuthController]")]
+    [Route("api/[controller]")]
     [ApiController]
     public class AuthController : ControllerBase
     {
