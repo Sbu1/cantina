@@ -87,8 +87,8 @@ if (!await roleManager.RoleExistsAsync(adminRole))
 }
 
 // Create Admin User
-string adminEmail = "admin@example.com";
-string adminPassword = "Admin@123"; // Change this to a secure password
+string adminEmail = "sbuddaz@gmail.com";
+string adminPassword = "pas4Admin@123"; // Change this to a secure password
 
 var adminUser = await userManager.FindByEmailAsync(adminEmail);
 if (adminUser == null)

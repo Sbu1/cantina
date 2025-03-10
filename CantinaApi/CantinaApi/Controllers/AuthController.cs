@@ -1,4 +1,5 @@
-﻿using System.IdentityModel.Tokens.Jwt;
+﻿using System.Data;
+using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using Cantina.Domain;
@@ -34,6 +35,8 @@ namespace CantinaAPI.Controllers
             if (!result.Succeeded)
                 return BadRequest(result.Errors);
 
+            await _userManager.AddToRoleAsync(user, "user");
+
             return Ok("User registered successfully!");
         }
 
@@ -53,14 +56,14 @@ namespace CantinaAPI.Controllers
         }
 
         [Authorize(Roles = "Admin")]
-        [HttpPost("assign-admin/{userId}")]
-        public async Task<IActionResult> AssignAdminRole(string userId)
+        [HttpPost("assign-role/{userId}")]
+        public async Task<IActionResult> AssignRole(string userId,[FromBody] string role)
         {
             var user = await _userManager.FindByIdAsync(userId);
             if (user == null)
                 return NotFound(new { message = "User not found" });
 
-            await _userManager.AddToRoleAsync(user, "Admin");
+            await _userManager.AddToRoleAsync(user, role);
             return Ok(new { message = "Admin role assigned successfully" });
         }
 
@@ -82,7 +85,10 @@ namespace CantinaAPI.Controllers
 
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
+
     }
+
+
 
     public record RegisterDto(string FullName, string Email, string Password);
     public record LoginDto(string Email, string Password);
