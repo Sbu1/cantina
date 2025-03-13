@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Cantina.Infrastructure.Persistence.Repository
 {
+
     public class DishRepository : IDishRepository
     {
         private readonly ApplicationDbContext _context;

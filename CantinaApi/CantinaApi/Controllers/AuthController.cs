@@ -7,6 +7,7 @@ using Cantina.Infrastructure.Persistence;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.IdentityModel.Tokens;
 
 namespace CantinaAPI.Controllers
@@ -41,6 +42,7 @@ namespace CantinaAPI.Controllers
         }
 
         [HttpPost("login")]
+        [EnableRateLimiting("requestlimiter")]
         public async Task<IActionResult> Login([FromBody] LoginDto model)
         {
             var user = await _userManager.FindByEmailAsync(model.Email);

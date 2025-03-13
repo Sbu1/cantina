@@ -1,4 +1,5 @@
 using System.Text;
+using System.Threading.RateLimiting;
 using Cantina.Application.Interfaces;
 using Cantina.Domain;
 using Cantina.Infrastructure.Persistence;
@@ -7,8 +8,10 @@ using Cantina.Infrastructure.Persistence.Middleware;
 using Cantina.Infrastructure.Persistence.Repository;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -16,7 +19,19 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-builder.Services.AddIdentity<User, IdentityRole>()
+builder.Services.AddIdentity<User, IdentityRole>(option =>
+{
+    option.Password.RequireDigit = true;
+    option.Password.RequiredLength = 8;
+    option.Password.RequireNonAlphanumeric = true;
+    option.Password.RequireUppercase = true;
+    option.Password.RequireLowercase = true;
+
+    // Account lockout settings (brute-force protection)
+    option.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
+    option.Lockout.MaxFailedAccessAttempts = 5;
+    option.Lockout.AllowedForNewUsers = true;
+})
     .AddEntityFrameworkStores<ApplicationDbContext>()
     .AddDefaultTokenProviders();
 
@@ -28,6 +43,17 @@ builder.Services.Configure<IdentityOptions>(options =>
 });
 
 
+
+builder.Services.AddRateLimiter(options =>
+{
+    options.AddFixedWindowLimiter("requestlimiter", limiterOptions =>
+    {
+        limiterOptions.PermitLimit = 5;  // Allow 5 requests
+        limiterOptions.Window = TimeSpan.FromMinutes(5); // Per 5 minutes
+        limiterOptions.QueueProcessingOrder = QueueProcessingOrder.OldestFirst;
+        limiterOptions.QueueLimit = 2;  // Extra 2 requests in queue
+    });
+});
 builder.Logging.ClearProviders();
 builder.Logging.AddConsole();
 
@@ -71,7 +97,8 @@ using (var scope = app.Services.CreateScope())
     var services = scope.ServiceProvider;
     await SeedRolesAndAdminAsync(services);
 }
-    app.UseSwagger();
+app.UseRateLimiter();
+app.UseSwagger();
 app.UseSwaggerUI();
 app.MapOpenApi();
 app.UseMiddleware<ExceptionHandlingMiddleware>();
