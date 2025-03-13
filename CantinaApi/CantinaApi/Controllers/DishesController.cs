@@ -9,7 +9,6 @@ namespace CantinaApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [EnableRateLimiting("requestlimiter")]
     public class DishesController : ControllerBase
     {
         private readonly IDishRepository _dishRepository;

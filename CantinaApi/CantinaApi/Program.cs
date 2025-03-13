@@ -46,7 +46,17 @@ builder.Services.Configure<IdentityOptions>(options =>
 
 builder.Services.AddRateLimiter(options =>
 {
-    options.AddFixedWindowLimiter("requestlimiter", limiterOptions =>
+    options.GlobalLimiter = PartitionedRateLimiter.Create<HttpContext, string>(httpContext =>
+        RateLimitPartition.GetFixedWindowLimiter(
+            partitionKey: httpContext.Connection.RemoteIpAddress?.ToString() ?? "unknown",
+            factory: _ => new FixedWindowRateLimiterOptions
+            {
+                PermitLimit = 100,  // Allow 100 requests
+                Window = TimeSpan.FromMinutes(1), // Per 1 minute
+                QueueProcessingOrder = QueueProcessingOrder.OldestFirst,
+                QueueLimit = 5  // Extra 5 requests in queue
+            }));
+    options.AddFixedWindowLimiter("loginLimiter", limiterOptions =>
     {
         limiterOptions.PermitLimit = 5;  // Allow 5 requests
         limiterOptions.Window = TimeSpan.FromMinutes(5); // Per 5 minutes
@@ -105,7 +115,7 @@ app.UseMiddleware<ExceptionHandlingMiddleware>();
 app.UseAuthentication();
 app.UseAuthorization();
 app.UseDeveloperExceptionPage();
-app.MapControllers();
+app.MapControllers().RequireRateLimiting("loginLimiter");
 
 app.Run();
 

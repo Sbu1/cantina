@@ -42,7 +42,7 @@ namespace CantinaAPI.Controllers
         }
 
         [HttpPost("login")]
-        [EnableRateLimiting("requestlimiter")]
+        [EnableRateLimiting("loginLimiter")]
         public async Task<IActionResult> Login([FromBody] LoginDto model)
         {
             var user = await _userManager.FindByEmailAsync(model.Email);
